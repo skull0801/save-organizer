@@ -57,7 +57,6 @@ public class MFGame {
         }
     }
 
-
     /// <summary>
     /// Adds profile to profiles in a game, returns wheter or not it could be added
     /// </summary>
@@ -93,11 +92,24 @@ public class MFGame {
         }
     }
 
+    public MFProfile ProfileWithName(string name)
+    {
+        foreach(MFProfile profile in profiles)
+        {
+            if (profile.name.Equals(name))
+            {
+                return profile;
+            }
+        }
+        return null;
+    }
+
     /// <summary>
     /// checks if the path has the same structure as the save file for that game
     /// </summary>
     public bool IsPathAValidBackup(string path)
     {
+        // TODO check if it has the same structure as the save file
         return true;
     }
 

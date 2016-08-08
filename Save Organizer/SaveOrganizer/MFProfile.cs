@@ -36,6 +36,7 @@ public class MFProfile : IEquatable<MFProfile> {
                 if (IsPathAValidBackup(dir))
                 {
                     MFSave save = new MFSave(dir);
+                    save.profile = this;
                     saves.Add(save);
                 }
             }
@@ -49,32 +50,31 @@ public class MFProfile : IEquatable<MFProfile> {
     public void BackupSaveFromPath(string savePath)
     {
         string saveName = MFSave.GetDefaultNameForSaveInFolder(path);
-        CopyDirectory(savePath, saveName);
+        MFFileSystem.CopyDirectory(savePath, saveName);
+        MFSave save = new MFSave(saveName);
+        saves.Add(save);
     }
 
-    private void CopyDirectory(string source, string dest)
+    public bool LoadSave(MFSave save)
     {
-        DirectoryInfo dir = new DirectoryInfo(source);
+        return save != null && save.LoadToPath(game.saveFolderPath);
+    }
 
-        DirectoryInfo[] dirs = dir.GetDirectories();
+    public bool LoadSaveWithName(string saveName)
+    {
+        return LoadSave(SaveWithName(saveName));
+    }
 
-        if (!Directory.Exists(dest))
+    public MFSave SaveWithName(string saveName)
+    {
+        foreach(MFSave save in saves)
         {
-            Directory.CreateDirectory(dest);
+            if (save.name.Equals(saveName))
+            {
+                return save;
+            }
         }
-
-        FileInfo[] files = dir.GetFiles();
-        foreach (FileInfo file in files)
-        {
-            string temppath = Path.Combine(dest, file.Name);
-            file.CopyTo(temppath, false);
-        }
-
-        foreach (DirectoryInfo subdir in dirs)
-        {
-            string temppath = Path.Combine(dest, subdir.Name);
-            CopyDirectory(subdir.FullName, dest);
-        }
+        return null;
     }
 
     /// <summary>

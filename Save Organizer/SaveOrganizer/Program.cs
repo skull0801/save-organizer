@@ -17,9 +17,11 @@ namespace SaveOrganizer
         {
             MFUserInfo a = new MFUserInfo();
             MFGame lastGame = a.games.Last<MFGame>();
-            MFProfile prof = lastGame.profiles[0];
-            lastGame.currentProfile = prof;
-            lastGame.BackupCurrentSave();
+            MFProfile prof = lastGame.ProfileWithName("other");
+            MFSave save = prof.SaveWithName("shit");
+            Console.WriteLine("Load sucess? {0}", save.Load());
+            //lastGame.currentProfile = prof;
+            //lastGame.BackupCurrentSave();
 
             Console.WriteLine(lastGame.ToString());
             Console.WriteLine(lastGame.profiles.ToString());

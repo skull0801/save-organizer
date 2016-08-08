@@ -3,6 +3,8 @@ using System;
 
 public class MFSave {
     public static readonly string DEFAULT_SAVE_NAME = "save ";
+    public static readonly string BACKUP_SAVE_NAME = "backUpSaveName";
+    public MFProfile profile;
 
     public string path
     {
@@ -44,7 +46,7 @@ public class MFSave {
         catch (ArgumentException e) {}
         return false;
     }
-
+    
     public static string GetDefaultNameForSaveInFolder(string folder)
     {
         long counter = 0;
@@ -52,9 +54,36 @@ public class MFSave {
         do
         {
             counter++;
-            name = Path.Combine(folder, MFSave.DEFAULT_SAVE_NAME + counter.ToString());
+            name = Path.Combine(folder, DEFAULT_SAVE_NAME + counter.ToString());
         } while (Directory.Exists(name));
         return name;
+    }
+
+    public bool Load()
+    {
+        return LoadToPath(profile.game.saveFolderPath);
+    }
+
+    public bool LoadToPath(string pathToLoad)
+    {
+        if (pathToLoad != null)
+        {
+            Directory.Move(pathToLoad, BACKUP_SAVE_NAME);
+            MFFileSystem.CopyDirectory(path, pathToLoad);
+            if (Directory.Exists(pathToLoad))
+            {
+                Directory.Delete(BACKUP_SAVE_NAME, true);
+                return true;
+            }
+            else
+            {
+                Directory.Move(BACKUP_SAVE_NAME, pathToLoad);
+                return false;
+            }
+        } else
+        {
+            return false;
+        }
     }
 
     public override string ToString()
