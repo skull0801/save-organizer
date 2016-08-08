@@ -15,6 +15,14 @@ namespace SaveOrganizer
         [STAThread]
         static void Main()
         {
+            MFUserInfo a = new MFUserInfo();
+            MFGame lastGame = a.games.Last<MFGame>();
+            MFProfile prof = lastGame.profiles[0];
+            lastGame.currentProfile = prof;
+            lastGame.BackupCurrentSave();
+
+            Console.WriteLine(lastGame.ToString());
+            Console.WriteLine(lastGame.profiles.ToString());
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
