@@ -15,20 +15,20 @@ namespace SaveOrganizer
         [STAThread]
         static void Main()
         {
-            MFUserInfo a = new MFUserInfo();
-            MFGame lastGame = a.games.Last<MFGame>();
-            MFProfile prof = lastGame.ProfileWithName("other");
-            MFSave save = prof.SaveWithName("shit");
-            Console.WriteLine("Load sucess? {0}", save.Load());
+            //MFUserInfo a = new MFUserInfo();
+            //MFGame lastGame = a.games.Last<MFGame>();
+            //MFProfile prof = lastGame.ProfileWithName("other");
+            //MFSave save = prof.SaveWithName("shit");
+            //Console.WriteLine("Load sucess? {0}", save.Load());
             //lastGame.currentProfile = prof;
             //lastGame.BackupCurrentSave();
 
-            Console.WriteLine(lastGame.ToString());
-            Console.WriteLine(lastGame.profiles.ToString());
+            //Console.WriteLine(lastGame.ToString());
+            //Console.WriteLine(lastGame.profiles.ToString());
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new MainWindow());
         }
     }
 }
