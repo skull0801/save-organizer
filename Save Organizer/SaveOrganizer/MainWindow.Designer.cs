@@ -116,6 +116,7 @@
             // SortingSelector
             // 
             this.SortingSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SortingSelector.Enabled = false;
             this.SortingSelector.FormattingEnabled = true;
             this.SortingSelector.Items.AddRange(new object[] {
             "Created",
@@ -127,11 +128,12 @@
             // 
             // SearchTextInput
             // 
+            this.SearchTextInput.Enabled = false;
             this.SearchTextInput.Location = new System.Drawing.Point(142, 71);
             this.SearchTextInput.Name = "SearchTextInput";
             this.SearchTextInput.Size = new System.Drawing.Size(264, 20);
             this.SearchTextInput.TabIndex = 9;
-            this.SearchTextInput.Text = "Search...";
+            this.SearchTextInput.Text = "Filter...";
             // 
             // BackupCurrentButton
             // 
@@ -202,6 +204,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainWindow";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "skull0801\'s Save Organizer";
             this.ResumeLayout(false);
             this.PerformLayout();
