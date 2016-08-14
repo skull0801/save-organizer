@@ -8,18 +8,30 @@ public class MFGame {
     private string _backupsFolderPath;
 
     public string name { get; set; }
-    private string currentProfilePath;
-    [XmlIgnore] private MFProfile _currentProfile;
+    private int _currentProfileIndex;
+    [XmlIgnore] public int currentProfileIndex
+    {
+        get
+        {
+            return _currentProfileIndex;
+        }
+        set
+        {
+            if (value >= 0 && value < profiles.Count)
+            {
+                _currentProfileIndex = value;
+            }
+        }
+    }
     [XmlIgnore] public MFProfile currentProfile
     {
         get
         {
-            return _currentProfile;
-        }
-        set
-        {
-            _currentProfile = value;
-            currentProfilePath = currentProfile.path;
+            if (_currentProfileIndex != -1)
+            {
+                return profiles[currentProfileIndex];
+            }
+            return null;
         }
     }
     [XmlIgnore] public List<MFProfile> profiles;
@@ -45,16 +57,26 @@ public class MFGame {
         LoadProfiles();
     }
 
-    
+    public string[] GetAllProfileNames()
+    {
+        string[] names = new string[profiles.Count];
+        for (int i = 0; i < profiles.Count; i++)
+        {
+            names[i] = profiles[i].name;
+        }
+        return names;
+    }
+
     /// <summary>
     /// gets the current save and adds it to the current profile
     /// </summary>
-    public void BackupCurrentSave()
+    public MFSave BackupCurrentSave()
     {
         if (currentProfile != null && saveFolderPath != null)
         {
-            currentProfile.BackupSaveFromPath(saveFolderPath);
+            return currentProfile.BackupSaveFromPath(saveFolderPath);
         }
+        return null;
     }
 
     /// <summary>
@@ -62,7 +84,7 @@ public class MFGame {
     /// </summary>
     public bool AddProfile(MFProfile profile)
     {
-        if (profiles.Contains(profile))
+        if (!profiles.Contains(profile))
         {
             profiles.Add(profile);
             return true;
@@ -88,6 +110,10 @@ public class MFGame {
                 profile.game = this;
                 profile.LoadSaves();
                 profiles.Add(profile);
+            }
+            if (_currentProfileIndex < -1 || _currentProfileIndex >= profiles.Count)
+            {
+                _currentProfileIndex = -1;
             }
         }
     }

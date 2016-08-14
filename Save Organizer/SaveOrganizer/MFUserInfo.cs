@@ -11,6 +11,33 @@ public class MFUserInfo {
 
     public List<MFGame> games { get; set; }
     private XmlSerializer gamesSerializer;
+    
+    private int _currentGameIndex = -1;
+    public int currentGameIndex
+    {
+        get
+        {
+            return _currentGameIndex;
+        }
+        set
+        {
+            if (value >= 0 && value < games.Count)
+            {
+                _currentGameIndex = value;
+            }
+        }
+    }
+    public MFGame currentGame
+    {
+        get
+        {
+            if (_currentGameIndex != -1)
+            {
+                return games[currentGameIndex];
+            }
+            return null;
+        }
+    }
 
     public MFUserInfo()
     {
@@ -19,6 +46,15 @@ public class MFUserInfo {
         LoadUserInfo();
     }
 
+    public string[] GetAllGamesNames()
+    {
+        string[] names = new string[games.Count];
+        for (int i = 0; i < games.Count; i++)
+        {
+            names[i] = games[i].name;
+        }
+        return names;
+    }
 
     /// <summary>
     /// Loads user's configuration also loads the info for all the games saved
@@ -41,6 +77,10 @@ public class MFUserInfo {
                 MemoryStream stream = new MemoryStream(buffer);
                 games = (List<MFGame>) gamesSerializer.Deserialize(stream);
                 Console.WriteLine("Games List loaded successfully");
+                if (games.Count > 0)
+                {
+                    currentGameIndex = 0;
+                }
             }
         }
         else

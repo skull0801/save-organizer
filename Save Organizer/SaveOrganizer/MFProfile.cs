@@ -43,16 +43,27 @@ public class MFProfile : IEquatable<MFProfile> {
         }
     }
 
-    
+    public string[] GetAllSaveFileNames()
+    {
+        string[] names = new string[saves.Count];
+        for (int i = 0; i < saves.Count; i++)
+        {
+            names[i] = saves[i].name;
+        }
+        return names;
+    }
+
     /// <summary>
     /// Copies the save from a certain path into the profile with a default name
     /// </summary>
-    public void BackupSaveFromPath(string savePath)
+    public MFSave BackupSaveFromPath(string savePath)
     {
+        // TODO maybe this can have an error?
         string saveName = MFSave.GetDefaultNameForSaveInFolder(path);
         MFFileSystem.CopyDirectory(savePath, saveName);
         MFSave save = new MFSave(saveName);
         saves.Add(save);
+        return save;
     }
 
     public bool LoadSave(MFSave save)

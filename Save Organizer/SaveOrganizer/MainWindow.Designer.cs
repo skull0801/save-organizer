@@ -18,7 +18,7 @@
                 components.Dispose();
             }
             base.Dispose(disposing);
-        }
+        }        
 
         #region Windows Form Designer generated code
 
@@ -34,7 +34,6 @@
             this.EditProfileButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.ProfilesSelector = new System.Windows.Forms.ComboBox();
-            this.listView1 = new System.Windows.Forms.ListView();
             this.label3 = new System.Windows.Forms.Label();
             this.SortingSelector = new System.Windows.Forms.ComboBox();
             this.SearchTextInput = new System.Windows.Forms.TextBox();
@@ -42,17 +41,20 @@
             this.LoadSelectedButton = new System.Windows.Forms.Button();
             this.LoadSaveProgressBar = new System.Windows.Forms.ProgressBar();
             this.SettingsButton = new System.Windows.Forms.Button();
+            this.SavesList = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // GamesSelector
             // 
             this.GamesSelector.AllowDrop = true;
             this.GamesSelector.BackColor = System.Drawing.SystemColors.Window;
+            this.GamesSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.GamesSelector.FormattingEnabled = true;
             this.GamesSelector.Location = new System.Drawing.Point(59, 19);
             this.GamesSelector.Name = "GamesSelector";
             this.GamesSelector.Size = new System.Drawing.Size(241, 21);
             this.GamesSelector.TabIndex = 0;
+            this.GamesSelector.SelectedIndexChanged += new System.EventHandler(this.GamesSelector_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -92,19 +94,13 @@
             // 
             // ProfilesSelector
             // 
+            this.ProfilesSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ProfilesSelector.FormattingEnabled = true;
             this.ProfilesSelector.Location = new System.Drawing.Point(59, 46);
             this.ProfilesSelector.Name = "ProfilesSelector";
             this.ProfilesSelector.Size = new System.Drawing.Size(241, 21);
             this.ProfilesSelector.TabIndex = 3;
-            // 
-            // listView1
-            // 
-            this.listView1.Location = new System.Drawing.Point(15, 98);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(391, 257);
-            this.listView1.TabIndex = 6;
-            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.ProfilesSelector.SelectedIndexChanged += new System.EventHandler(this.ProfilesSelector_SelectedIndexChanged);
             // 
             // label3
             // 
@@ -117,7 +113,11 @@
             // 
             // SortingSelector
             // 
+            this.SortingSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.SortingSelector.FormattingEnabled = true;
+            this.SortingSelector.Items.AddRange(new object[] {
+            "Created",
+            "Name"});
             this.SortingSelector.Location = new System.Drawing.Point(59, 71);
             this.SortingSelector.Name = "SortingSelector";
             this.SortingSelector.Size = new System.Drawing.Size(77, 21);
@@ -139,6 +139,7 @@
             this.BackupCurrentButton.TabIndex = 10;
             this.BackupCurrentButton.Text = "Backup Current Save";
             this.BackupCurrentButton.UseVisualStyleBackColor = true;
+            this.BackupCurrentButton.Click += new System.EventHandler(this.BackupCurrentButton_Click);
             // 
             // LoadSelectedButton
             // 
@@ -148,6 +149,7 @@
             this.LoadSelectedButton.TabIndex = 12;
             this.LoadSelectedButton.Text = "Load Selected Save";
             this.LoadSelectedButton.UseVisualStyleBackColor = true;
+            this.LoadSelectedButton.Click += new System.EventHandler(this.LoadSelectedButton_Click);
             // 
             // LoadSaveProgressBar
             // 
@@ -165,11 +167,21 @@
             this.SettingsButton.Text = "Settings";
             this.SettingsButton.UseVisualStyleBackColor = true;
             // 
+            // SavesList
+            // 
+            this.SavesList.ForeColor = System.Drawing.SystemColors.MenuText;
+            this.SavesList.FormattingEnabled = true;
+            this.SavesList.Location = new System.Drawing.Point(17, 100);
+            this.SavesList.Name = "SavesList";
+            this.SavesList.Size = new System.Drawing.Size(389, 251);
+            this.SavesList.TabIndex = 15;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(420, 396);
+            this.Controls.Add(this.SavesList);
             this.Controls.Add(this.SettingsButton);
             this.Controls.Add(this.LoadSaveProgressBar);
             this.Controls.Add(this.LoadSelectedButton);
@@ -177,7 +189,6 @@
             this.Controls.Add(this.SearchTextInput);
             this.Controls.Add(this.SortingSelector);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.listView1);
             this.Controls.Add(this.EditProfileButton);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.ProfilesSelector);
@@ -199,7 +210,6 @@
         private System.Windows.Forms.Button EditProfileButton;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox ProfilesSelector;
-        private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox SortingSelector;
         private System.Windows.Forms.TextBox SearchTextInput;
@@ -207,6 +217,7 @@
         private System.Windows.Forms.Button LoadSelectedButton;
         private System.Windows.Forms.ProgressBar LoadSaveProgressBar;
         private System.Windows.Forms.Button SettingsButton;
+        private System.Windows.Forms.ListBox SavesList;
     }
 }
 
