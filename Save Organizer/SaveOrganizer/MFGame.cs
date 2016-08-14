@@ -7,6 +7,14 @@ public class MFGame {
     private string _saveFolderPath;
     private string _backupsFolderPath;
 
+    public bool canBackup
+    {
+        get
+        {
+            return currentProfile != null && !String.IsNullOrWhiteSpace(saveFolderPath) && !String.IsNullOrWhiteSpace(backupsFolderPath);
+        }
+    }
+
     public string name { get; set; }
     private int _currentProfileIndex;
     [XmlIgnore] public int currentProfileIndex
@@ -43,6 +51,7 @@ public class MFGame {
     public MFGame()
     {
         profiles = new List<MFProfile>();
+        _currentProfileIndex = -1;
     }
 
     public MFGame(string name) : this()
@@ -72,7 +81,7 @@ public class MFGame {
     /// </summary>
     public MFSave BackupCurrentSave()
     {
-        if (currentProfile != null && saveFolderPath != null)
+        if (canBackup)
         {
             return currentProfile.BackupSaveFromPath(saveFolderPath);
         }
@@ -84,7 +93,7 @@ public class MFGame {
     /// </summary>
     public bool AddProfile(MFProfile profile)
     {
-        if (!profiles.Contains(profile))
+        if (!Contains(profile))
         {
             profiles.Add(profile);
             return true;
@@ -95,11 +104,36 @@ public class MFGame {
         }
     }
 
+    public bool RemoveProfileAtIndex(int index)
+    {
+        if (index >= 0 && index < profiles.Count)
+        {
+            MFProfile profile = profiles[index];
+            if (profile.Delete())
+            {
+                profiles.RemoveAt(index);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool RemoveProfile(MFProfile profile)
+    {
+        return RemoveProfileAtIndex(profiles.IndexOf(profile));
+    }
+
+    public bool Contains(MFProfile profile)
+    {
+        return profiles.Contains(profile);
+    }
+
     /// <summary>
     /// Loads all the profiles for the game (folders in the backups path)
     /// </summary>
     public void LoadProfiles()
     {
+        profiles.Clear();
         if (backupsFolderPath != null)
         {
             //TODO catch exceptions
@@ -109,11 +143,20 @@ public class MFGame {
                 MFProfile profile = new MFProfile(dir);
                 profile.game = this;
                 profile.LoadSaves();
-                profiles.Add(profile);
+                AddProfile(profile);
             }
-            if (_currentProfileIndex < -1 || _currentProfileIndex >= profiles.Count)
+            if (_currentProfileIndex < 0)
+            {
+                if (profiles.Count > 0)
+                {
+                    _currentProfileIndex = 0;
+                    Console.WriteLine("SET TO 0");
+                }
+            }
+            else if (_currentProfileIndex >= profiles.Count)
             {
                 _currentProfileIndex = -1;
+                Console.WriteLine("SET TO -1");
             }
         }
     }
@@ -152,11 +195,8 @@ public class MFGame {
         }
         set
         {
-            if (Directory.Exists(value))
-            {
-                _backupsFolderPath = value;
-                LoadProfiles();
-            }
+            _backupsFolderPath = value;
+            LoadProfiles();
         }
     }
 
@@ -168,10 +208,7 @@ public class MFGame {
         }
         set
         {
-            if (Directory.Exists(value))
-            {
-                _saveFolderPath = value;
-            }
+            _saveFolderPath = value;
         }
     }
 

@@ -12,7 +12,15 @@ public class MFProfile : IEquatable<MFProfile> {
         {
             return Path.GetFileName(_path);
         }
-    } 
+    }
+
+    public bool canLoadSave
+    {
+        get
+        {
+            return !String.IsNullOrWhiteSpace(game.saveFolderPath) && saves.Count > 0;
+        }
+    }
 
     public string path
     {
@@ -43,6 +51,28 @@ public class MFProfile : IEquatable<MFProfile> {
         }
     }
 
+    public bool Delete()
+    {
+        if (path != null)
+        {
+            try
+            {
+                Directory.Delete(path, true);
+                return true;
+            }
+            catch (Exception e)
+            {
+                // TODO catch specific exceptions
+                Console.WriteLine("ERROR WHEN DELETING!" + e.Message);
+                return false;
+            }
+        }
+        else
+        {
+            return true;
+        }
+    }
+
     public string[] GetAllSaveFileNames()
     {
         string[] names = new string[saves.Count];
@@ -68,7 +98,7 @@ public class MFProfile : IEquatable<MFProfile> {
 
     public bool LoadSave(MFSave save)
     {
-        return save != null && save.LoadToPath(game.saveFolderPath);
+        return save != null && game.saveFolderPath != null && save.LoadToPath(game.saveFolderPath);
     }
 
     public bool LoadSaveWithName(string saveName)
@@ -122,9 +152,13 @@ public class MFProfile : IEquatable<MFProfile> {
         return true;
     }
 
-    public MFProfile(string path)
+    public MFProfile()
     {
         this.saves = new List<MFSave>();
+    }
+
+    public MFProfile(string path) : this()
+    {
         this.SetPath(path);
     }
 

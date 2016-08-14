@@ -12,9 +12,23 @@ namespace SaveOrganizer
 {
     public partial class MainWindow : Form
     {
-        private MFUserInfo userInfo;
-        private MFGame selectedGame;
-        private MFProfile selectedProfile;
+        private MFAppInfo appInfo;
+
+        private MFUserInfo userInfo
+        {
+            get { return appInfo.userInfo; }
+            set { appInfo.userInfo = value; }
+        }
+        private MFGame selectedGame
+        {
+            get { return appInfo.selectedGame; }
+            set { appInfo.selectedGame = value; }
+        }
+        private MFProfile selectedProfile
+        {
+            get { return appInfo.selectedProfile; }
+            set { appInfo.selectedProfile = value; }
+        }
 
         private bool loading = false; // shows if animating loading bar
         private bool performingTask = false; // shows if performing operation (such as loading or backing up)
@@ -23,9 +37,9 @@ namespace SaveOrganizer
 
         public MainWindow()
         {
+            appInfo = MFAppInfo.sharedInstance();
             InitializeComponent();
             SetupWindow();
-            LoadUserInfo();
             RefreshWindow();
         }
 
@@ -36,16 +50,6 @@ namespace SaveOrganizer
             loadingBarTimer.Tick += new EventHandler(StepLoadingBar);
         }
 
-        public void LoadUserInfo()
-        {
-            userInfo = new MFUserInfo();
-            selectedGame = userInfo.currentGame;
-            if (selectedGame != null)
-            {
-                selectedProfile = selectedGame.currentProfile;
-            }
-        }
-
         public void RefreshWindow()
         {
             RefreshGames();
@@ -54,6 +58,7 @@ namespace SaveOrganizer
             SortingSelector.SelectedIndex = 1;
 
             RefreshSavesList();
+            RefreshButtons();
         }
 
         public void RefreshGames()
@@ -62,24 +67,40 @@ namespace SaveOrganizer
             string[] gameNames = userInfo.GetAllGamesNames();
             GamesSelector.Items.AddRange(gameNames);
             GamesSelector.SelectedIndex = userInfo.currentGameIndex;
+
+            GamesSelector.Enabled = GamesSelector.Items.Count > 0;
         }
 
         public void RefreshProfiles()
         {
             ProfilesSelector.Items.Clear();
-            string[] profileNames = selectedGame.GetAllProfileNames();
-            ProfilesSelector.Items.AddRange(profileNames);
-            ProfilesSelector.SelectedIndex = selectedGame.currentProfileIndex;
+            if (selectedGame != null)
+            {
+                string[] profileNames = selectedGame.GetAllProfileNames();
+                ProfilesSelector.Items.AddRange(profileNames);
+                ProfilesSelector.SelectedIndex = selectedGame.currentProfileIndex;
+            }
+
+            ProfilesSelector.Enabled = ProfilesSelector.Items.Count > 0;
         }
 
         public void RefreshSavesList()
         {
+            SavesList.Items.Clear();
             if (selectedProfile != null)
             {
-                SavesList.Items.Clear();
                 string[] saveNames = selectedProfile.GetAllSaveFileNames();
                 SavesList.Items.AddRange(saveNames);
             }
+        }
+
+        public void RefreshButtons()
+        {
+            LoadSelectedButton.Enabled = selectedProfile != null && selectedProfile.canLoadSave;
+            BackupCurrentButton.Enabled = selectedGame != null && selectedGame.canBackup;
+
+            EditGameButton.Enabled = true;
+            EditProfileButton.Enabled = selectedGame != null;
         }
 
         private void GamesSelector_SelectedIndexChanged(object sender, EventArgs e)
@@ -88,6 +109,8 @@ namespace SaveOrganizer
             userInfo.currentGameIndex = selector.SelectedIndex;
             selectedGame = userInfo.currentGame;
             RefreshProfiles();
+            RefreshSavesList();
+            RefreshButtons();
         }
 
         private void ProfilesSelector_SelectedIndexChanged(object sender, EventArgs e)
@@ -104,6 +127,7 @@ namespace SaveOrganizer
                 //TODO handle this error
                 Console.WriteLine("Selected profile without game selected!");
             }
+            RefreshButtons();
         }
 
         private void BackupCurrentButton_Click(object sender, EventArgs e)
@@ -192,6 +216,23 @@ namespace SaveOrganizer
         {
             loading = false;
             loadingBarTimer.Stop();
+        }
+
+        private void EditProfileButton_Click(object sender, EventArgs e)
+        {
+            EditProfileWindow window = new EditProfileWindow();
+            window.ShowDialog();
+
+            RefreshWindow();
+            userInfo.SaveGamesList();
+        }
+
+        private void EditGameButton_Click(object sender, EventArgs e)
+        {
+            EditGamesWindow window = new EditGamesWindow();
+            window.ShowDialog();
+
+            RefreshWindow();
         }
     }
 }

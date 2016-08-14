@@ -73,6 +73,7 @@
             this.EditGameButton.TabIndex = 2;
             this.EditGameButton.Text = "Edit Games";
             this.EditGameButton.UseVisualStyleBackColor = true;
+            this.EditGameButton.Click += new System.EventHandler(this.EditGameButton_Click);
             // 
             // EditProfileButton
             // 
@@ -82,6 +83,7 @@
             this.EditProfileButton.TabIndex = 5;
             this.EditProfileButton.Text = "Edit Profiles";
             this.EditProfileButton.UseVisualStyleBackColor = true;
+            this.EditProfileButton.Click += new System.EventHandler(this.EditProfileButton_Click);
             // 
             // label2
             // 
@@ -160,6 +162,7 @@
             // 
             // SettingsButton
             // 
+            this.SettingsButton.Enabled = false;
             this.SettingsButton.Location = new System.Drawing.Point(336, 361);
             this.SettingsButton.Name = "SettingsButton";
             this.SettingsButton.Size = new System.Drawing.Size(70, 23);
@@ -180,7 +183,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(420, 396);
+            this.ClientSize = new System.Drawing.Size(423, 396);
             this.Controls.Add(this.SavesList);
             this.Controls.Add(this.SettingsButton);
             this.Controls.Add(this.LoadSaveProgressBar);
@@ -195,6 +198,9 @@
             this.Controls.Add(this.EditGameButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.GamesSelector);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "MainWindow";
             this.Text = "skull0801\'s Save Organizer";
             this.ResumeLayout(false);

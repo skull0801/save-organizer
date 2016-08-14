@@ -99,6 +99,36 @@ public class MFUserInfo {
         games.Add(new MFGame("Game", @"D:\Downloads\Save", @"D:\Downloads\Back"));
     }
 
+    public void AddGame(MFGame game)
+    {
+        games.Add(game);
+        if (_currentGameIndex < 0)
+        {
+            _currentGameIndex = 0;
+        }
+        MFAppInfo.sharedInstance().selectedGame = currentGame;
+        SaveGamesList();
+    }
+
+    public void DeleteGameAtIndex(int index)
+    {
+        if (index >= 0 && index <= games.Count)
+        {
+            games.RemoveAt(index);
+            if (_currentGameIndex >= games.Count)
+            {
+                _currentGameIndex -= 1;
+            }
+            MFAppInfo.sharedInstance().selectedGame = currentGame;
+            SaveGamesList();
+        }
+    }
+
+    public void DeleteGame(MFGame game)
+    {
+        DeleteGameAtIndex(games.IndexOf(game));
+    }
+
     /// <summary>
     /// Saves all the current games to file
     /// </summary>
