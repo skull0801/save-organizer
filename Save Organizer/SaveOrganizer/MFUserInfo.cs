@@ -23,7 +23,12 @@ public class MFUserInfo {
         {
             if (value >= 0 && value < games.Count)
             {
+                if (_currentGameIndex >= 0)
+                {
+                    currentGame.profiles.Clear();
+                }
                 _currentGameIndex = value;
+                currentGame.LoadProfiles();
             }
         }
     }
@@ -117,7 +122,7 @@ public class MFUserInfo {
             games.RemoveAt(index);
             if (_currentGameIndex >= games.Count)
             {
-                _currentGameIndex -= 1;
+                _currentGameIndex -= games.Count - 1;
             }
             MFAppInfo.sharedInstance().selectedGame = currentGame;
             SaveGamesList();

@@ -68,7 +68,7 @@ public class MFSave {
     {
         if (pathToLoad != null)
         {
-            Directory.Move(pathToLoad, BACKUP_SAVE_NAME);
+            MFFileSystem.MoveDirectory(pathToLoad, BACKUP_SAVE_NAME);
             MFFileSystem.CopyDirectory(path, pathToLoad);
             if (Directory.Exists(pathToLoad))
             {
@@ -77,7 +77,7 @@ public class MFSave {
             }
             else
             {
-                Directory.Move(BACKUP_SAVE_NAME, pathToLoad);
+                MFFileSystem.MoveDirectory(BACKUP_SAVE_NAME, pathToLoad);
                 return false;
             }
         } else

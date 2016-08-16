@@ -48,6 +48,9 @@ namespace SaveOrganizer
             loadingBarTimer = new System.Windows.Forms.Timer();
             loadingBarTimer.Interval = 50;
             loadingBarTimer.Tick += new EventHandler(StepLoadingBar);
+
+            Activated += Window_Focused;
+
         }
 
         public void RefreshWindow()
@@ -108,6 +111,7 @@ namespace SaveOrganizer
             ComboBox selector = (ComboBox)sender;
             userInfo.currentGameIndex = selector.SelectedIndex;
             selectedGame = userInfo.currentGame;
+            selectedGame.LoadProfiles();
             RefreshProfiles();
             RefreshSavesList();
             RefreshButtons();
@@ -234,5 +238,20 @@ namespace SaveOrganizer
 
             RefreshWindow();
         }
+
+        private void Window_Focused(object sender, System.EventArgs e)
+        {
+            if (userInfo.currentGame != null)
+            {
+                userInfo.currentGame.LoadProfiles();
+                RefreshProfiles();
+                if (userInfo.currentGame.currentProfile != null)
+                {
+                    userInfo.currentGame.currentProfile.LoadSaves();
+                    RefreshSavesList();
+                }
+            }
+        }
+
     }
 }

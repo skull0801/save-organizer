@@ -38,6 +38,7 @@ public class MFProfile : IEquatable<MFProfile> {
         if (path != null)
         {
             //TODO catch exceptions
+            saves.Clear();
             List<string> dirs = new List<string>(Directory.EnumerateDirectories(path));
             foreach (string dir in dirs)
             {

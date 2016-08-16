@@ -17,7 +17,7 @@ public class MFFileSystem
         foreach (FileInfo file in files)
         {
             string temppath = Path.Combine(dest, file.Name);
-            file.CopyTo(temppath, false);
+            file.CopyTo(temppath, true);
         }
 
         foreach (DirectoryInfo subdir in dirs)
@@ -26,4 +26,11 @@ public class MFFileSystem
             CopyDirectory(subdir.FullName, temppath);
         }
     }
+    
+    public static void MoveDirectory(string source, string dest)
+    {
+        MFFileSystem.CopyDirectory(source, dest);
+        Directory.Delete(source, true);
+    }
+
 }

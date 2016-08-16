@@ -63,7 +63,6 @@ public class MFGame {
     {
         this.saveFolderPath = saveFolderPath;
         this.backupsFolderPath = backupsFolderPath;
-        LoadProfiles();
     }
 
     public string[] GetAllProfileNames()
@@ -112,6 +111,10 @@ public class MFGame {
             if (profile.Delete())
             {
                 profiles.RemoveAt(index);
+                if (_currentProfileIndex >= profiles.Count)
+                {
+                    _currentProfileIndex = profiles.Count - 1;
+                }
                 return true;
             }
         }
@@ -196,7 +199,6 @@ public class MFGame {
         set
         {
             _backupsFolderPath = value;
-            LoadProfiles();
         }
     }
 
