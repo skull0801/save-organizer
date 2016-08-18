@@ -137,7 +137,7 @@ public class MFGame {
     public void LoadProfiles()
     {
         profiles.Clear();
-        if (backupsFolderPath != null)
+        if (Directory.Exists(backupsFolderPath))
         {
             //TODO catch exceptions
             List<string> dirs = new List<string>(Directory.EnumerateDirectories(backupsFolderPath));
@@ -161,6 +161,10 @@ public class MFGame {
                 _currentProfileIndex = -1;
                 Console.WriteLine("SET TO -1");
             }
+        }
+        else
+        {
+            _currentProfileIndex = -1;
         }
     }
 

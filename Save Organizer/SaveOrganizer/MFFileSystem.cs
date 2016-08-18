@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 public class MFFileSystem
 {
@@ -10,6 +11,7 @@ public class MFFileSystem
 
         if (!Directory.Exists(dest))
         {
+            //TODO catch exception (illegal name)
             Directory.CreateDirectory(dest);
         }
 
@@ -26,11 +28,23 @@ public class MFFileSystem
             CopyDirectory(subdir.FullName, temppath);
         }
     }
-    
+        
     public static void MoveDirectory(string source, string dest)
     {
         MFFileSystem.CopyDirectory(source, dest);
         Directory.Delete(source, true);
+    }
+
+    public static bool IsPathValid(string path)
+    {
+        try
+        {
+            Path.GetFullPath(path);
+            return true;
+        }
+        catch (NotSupportedException e) { }
+        catch (ArgumentException e) { }
+        return false;
     }
 
 }

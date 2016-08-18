@@ -103,7 +103,7 @@ namespace SaveOrganizer
                 {
                     string path = Path.Combine(selectedGame.backupsFolderPath, newProfileName);
                     MFProfile newProfile = new MFProfile(path, selectedGame);
-                    if (newProfile.path != null)
+                    if (Directory.Exists(newProfile.path))
                     {
                         selectedGame.AddProfile(newProfile);
                     }
@@ -121,6 +121,14 @@ namespace SaveOrganizer
                 {
                     MFProfile profile = selectedGame.profiles[index];
                     string newProfileName = GetProfileNameWithTitleAndPrompt("Edit " + profile.name, "Name: ", profile.name);
+                    if (selectedGame.profiles[index].RenameTo(newProfileName))
+                    {
+                        RefreshProfilesList();
+                    }
+                    else
+                    { 
+                        MessageBox.Show("Profile with name " + newProfileName + " already exists!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
         }
@@ -189,12 +197,27 @@ namespace SaveOrganizer
 
         private void SavePathText_TextChanged(object sender, EventArgs e)
         {
-
+            string path = SavePathText.Text;
+            if (!String.IsNullOrEmpty(path) && !Directory.Exists(path))
+            {
+                SavePathText.Text = "";
+                selectedGame.saveFolderPath = "";
+            }
         }
 
         private void BackupPathText_TextChanged(object sender, EventArgs e)
         {
-
+            string path = BackupPathText.Text;
+            if (!Directory.Exists(path))
+            {
+                BackupPathText.Text = "";
+                selectedGame.backupsFolderPath = "";
+            }
+            else
+            {
+                selectedGame.LoadProfiles();
+                RefreshProfilesList();
+            }
         }
     }
 }

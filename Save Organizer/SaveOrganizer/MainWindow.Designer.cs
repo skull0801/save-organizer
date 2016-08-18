@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.GamesSelector = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.EditGameButton = new System.Windows.Forms.Button();
@@ -42,6 +43,11 @@
             this.LoadSaveProgressBar = new System.Windows.Forms.ProgressBar();
             this.SettingsButton = new System.Windows.Forms.Button();
             this.SavesList = new System.Windows.Forms.ListBox();
+            this.SaveMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.openLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.renameSaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SaveMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // GamesSelector
@@ -174,12 +180,43 @@
             // 
             // SavesList
             // 
+            this.SavesList.ContextMenuStrip = this.SaveMenu;
             this.SavesList.ForeColor = System.Drawing.SystemColors.MenuText;
             this.SavesList.FormattingEnabled = true;
             this.SavesList.Location = new System.Drawing.Point(17, 100);
             this.SavesList.Name = "SavesList";
             this.SavesList.Size = new System.Drawing.Size(389, 251);
             this.SavesList.TabIndex = 15;
+            // 
+            // SaveMenu
+            // 
+            this.SaveMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openLocationToolStripMenuItem,
+            this.renameSaveToolStripMenuItem,
+            this.deleteToolStripMenuItem});
+            this.SaveMenu.Name = "SaveMenu";
+            this.SaveMenu.Size = new System.Drawing.Size(153, 92);
+            // 
+            // openLocationToolStripMenuItem
+            // 
+            this.openLocationToolStripMenuItem.Name = "openLocationToolStripMenuItem";
+            this.openLocationToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openLocationToolStripMenuItem.Text = "Open Location";
+            this.openLocationToolStripMenuItem.Click += new System.EventHandler(this.openLocationToolStripMenuItem_Click);
+            // 
+            // renameSaveToolStripMenuItem
+            // 
+            this.renameSaveToolStripMenuItem.Name = "renameSaveToolStripMenuItem";
+            this.renameSaveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.renameSaveToolStripMenuItem.Text = "Rename";
+            this.renameSaveToolStripMenuItem.Click += new System.EventHandler(this.renameSaveToolStripMenuItem_Click);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.deleteToolStripMenuItem.Text = "Delete";
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -206,6 +243,7 @@
             this.Name = "MainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "skull0801\'s Save Organizer";
+            this.SaveMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -227,6 +265,10 @@
         private System.Windows.Forms.ProgressBar LoadSaveProgressBar;
         private System.Windows.Forms.Button SettingsButton;
         private System.Windows.Forms.ListBox SavesList;
+        private System.Windows.Forms.ContextMenuStrip SaveMenu;
+        private System.Windows.Forms.ToolStripMenuItem openLocationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem renameSaveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
     }
 }
 

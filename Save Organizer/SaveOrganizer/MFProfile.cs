@@ -30,12 +30,24 @@ public class MFProfile : IEquatable<MFProfile> {
         }
     }
 
+    public string parentDirectory
+    {
+        get
+        {
+            if (!String.IsNullOrWhiteSpace(path))
+            {
+                return Directory.GetParent(path).FullName;
+            }
+            return null;
+        }
+    }
+
     /// <summary>
     /// Loads all the saves for a profile (Valid folders in the path)
     /// </summary>
     public void LoadSaves()
     {
-        if (path != null)
+        if (Directory.Exists(path))
         {
             //TODO catch exceptions
             saves.Clear();
@@ -54,7 +66,7 @@ public class MFProfile : IEquatable<MFProfile> {
 
     public bool Delete()
     {
-        if (path != null)
+        if (Directory.Exists(path))
         {
             try
             {
@@ -97,9 +109,26 @@ public class MFProfile : IEquatable<MFProfile> {
         return save;
     }
 
+    public bool RenameTo(string newName)
+    {
+        string parent = parentDirectory;
+        if (parentDirectory != null)
+        {
+            string newPath = Path.Combine(parent, newName);
+            if (!Directory.Exists(newPath))
+            {
+                //TODO catch exceptions
+                Directory.Move(path, newPath);
+                _path = newPath;
+                return true;
+            }
+        }
+        return false;
+    }
+
     public bool LoadSave(MFSave save)
     {
-        return save != null && game.saveFolderPath != null && save.LoadToPath(game.saveFolderPath);
+        return save != null && Directory.Exists(game.saveFolderPath) && save.LoadToPath(game.saveFolderPath);
     }
 
     public bool LoadSaveWithName(string saveName)
@@ -117,6 +146,20 @@ public class MFProfile : IEquatable<MFProfile> {
             }
         }
         return null;
+    }
+
+    public bool RemoveSaveAtIndex(int index)
+    {
+        if (index >= 0 && index < saves.Count)
+        {
+            MFSave save = saves[index];
+            if (save.Delete())
+            {
+                saves.RemoveAt(index);
+                return true;
+            }
+        }
+        return false;
     }
 
     /// <summary>

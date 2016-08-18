@@ -54,7 +54,6 @@
             this.SavePathText.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.SavePathText.Location = new System.Drawing.Point(11, 21);
             this.SavePathText.Name = "SavePathText";
-            this.SavePathText.ReadOnly = true;
             this.SavePathText.Size = new System.Drawing.Size(237, 20);
             this.SavePathText.TabIndex = 5;
             this.SavePathText.TextChanged += new System.EventHandler(this.SavePathText_TextChanged);
@@ -118,7 +117,6 @@
             this.BackupPathText.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.BackupPathText.Location = new System.Drawing.Point(11, 21);
             this.BackupPathText.Name = "BackupPathText";
-            this.BackupPathText.ReadOnly = true;
             this.BackupPathText.Size = new System.Drawing.Size(237, 20);
             this.BackupPathText.TabIndex = 5;
             this.BackupPathText.TextChanged += new System.EventHandler(this.BackupPathText_TextChanged);
@@ -153,7 +151,6 @@
             // 
             // EditProfileButton
             // 
-            this.EditProfileButton.Enabled = false;
             this.EditProfileButton.Location = new System.Drawing.Point(255, 50);
             this.EditProfileButton.Name = "EditProfileButton";
             this.EditProfileButton.Size = new System.Drawing.Size(75, 23);

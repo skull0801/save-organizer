@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Diagnostics;
+using System.IO;
 
 namespace SaveOrganizer
 {
@@ -50,6 +52,8 @@ namespace SaveOrganizer
             loadingBarTimer.Tick += new EventHandler(StepLoadingBar);
 
             Activated += Window_Focused;
+
+            SaveMenu.Opened += SaveMenu_Opened;
 
         }
 
@@ -253,5 +257,68 @@ namespace SaveOrganizer
             }
         }
 
+        private void SaveMenu_Opened(object sender, System.EventArgs e)
+        {
+
+        }
+
+        private void openLocationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int index = SavesList.SelectedIndex;
+            if (index >= 0 && index < userInfo.currentGame.currentProfile.saves.Count)
+            {
+                MFSave save = userInfo.currentGame.currentProfile.saves[index];
+                string argument = "/select, \"" + save.path + "\"";
+                Process.Start("explorer.exe", argument);
+            }
+        }
+
+        private void renameSaveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int index = SavesList.SelectedIndex;
+            if (index >= 0 && index < userInfo.currentGame.currentProfile.saves.Count)
+            {
+                string newName = GetNameWithTitleAndPrompt("New Name", "Name: ", userInfo.currentGame.currentProfile.saves[index].name);
+                switch(userInfo.currentGame.currentProfile.saves[index].RenameTo(newName))
+                {
+                    case MFSaveRenameResult.NAME_EXISTS:
+                        MessageBox.Show("File with name " + newName + " already exists!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        break;
+                    case MFSaveRenameResult.EMPTY:
+                        MessageBox.Show("File cannot have empty name.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        break;
+                }
+                RefreshSavesList();
+            }
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int index = SavesList.SelectedIndex;
+            if (index >= 0 && index < userInfo.currentGame.currentProfile.saves.Count)
+            {
+                MFSave save = userInfo.currentGame.currentProfile.saves[index];
+                if (MessageBox.Show("Are you sure you want to delete?", "Delete " + save.name, MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    if (!userInfo.currentGame.currentProfile.RemoveSaveAtIndex(index))
+                    {
+                        MessageBox.Show("Could not delete save!");
+                    }
+                    RefreshSavesList();
+                }
+            }
+        }
+
+        public string GetNameWithTitleAndPrompt(string title, string prompt = "Name: ", string defaultText = "")
+        {
+            string name = null;
+            TextInputForm form = new TextInputForm(title, prompt);
+            form.InputText = defaultText;
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                name = form.InputText;
+            }
+            return name;
+        }
     }
 }
