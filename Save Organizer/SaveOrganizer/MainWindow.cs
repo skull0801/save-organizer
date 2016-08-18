@@ -48,7 +48,7 @@ namespace SaveOrganizer
         private void SetupWindow()
         {
             loadingBarTimer = new System.Windows.Forms.Timer();
-            loadingBarTimer.Interval = 50;
+            loadingBarTimer.Interval = 10;
             loadingBarTimer.Tick += new EventHandler(StepLoadingBar);
 
             Activated += Window_Focused;
@@ -99,6 +99,7 @@ namespace SaveOrganizer
                 string[] saveNames = selectedProfile.GetAllSaveFileNames();
                 SavesList.Items.AddRange(saveNames);
             }
+            LoadSelectedButton.Enabled = SavesList.SelectedIndex != -1;
         }
 
         public void RefreshButtons()
@@ -210,7 +211,8 @@ namespace SaveOrganizer
         private void StepLoadingBar(object sender, EventArgs e)
         {
             LoadSaveProgressBar.PerformStep();
-            if (LoadSaveProgressBar.Value >= LoadSaveProgressBar.Maximum)
+            LoadSaveProgressBar.Value = LoadSaveProgressBar.Value - 1;
+            if (LoadSaveProgressBar.Value >= LoadSaveProgressBar.Maximum - 1)
             {
                 LoadSaveProgressBar.Value = LoadSaveProgressBar.Minimum;
                 if (!performingTask)
@@ -319,6 +321,11 @@ namespace SaveOrganizer
                 name = form.InputText;
             }
             return name;
+        }
+
+        private void SavesList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadSelectedButton.Enabled = SavesList.SelectedIndex != -1;
         }
     }
 }

@@ -166,6 +166,7 @@
             this.LoadSaveProgressBar.Location = new System.Drawing.Point(269, 366);
             this.LoadSaveProgressBar.Name = "LoadSaveProgressBar";
             this.LoadSaveProgressBar.Size = new System.Drawing.Size(61, 12);
+            this.LoadSaveProgressBar.Step = 5;
             this.LoadSaveProgressBar.TabIndex = 13;
             // 
             // SettingsButton
@@ -187,6 +188,7 @@
             this.SavesList.Name = "SavesList";
             this.SavesList.Size = new System.Drawing.Size(389, 251);
             this.SavesList.TabIndex = 15;
+            this.SavesList.SelectedIndexChanged += new System.EventHandler(this.SavesList_SelectedIndexChanged);
             // 
             // SaveMenu
             // 
@@ -195,7 +197,7 @@
             this.renameSaveToolStripMenuItem,
             this.deleteToolStripMenuItem});
             this.SaveMenu.Name = "SaveMenu";
-            this.SaveMenu.Size = new System.Drawing.Size(153, 92);
+            this.SaveMenu.Size = new System.Drawing.Size(153, 70);
             // 
             // openLocationToolStripMenuItem
             // 
